@@ -22,6 +22,18 @@ The main purpose is to be able to save as much money on a grocery list based off
 - books: [OBJECT]
   - collection of books
 
+### Controller
+role | method | endpoint | validation | status |
+--- | --- | --- | --- | --- |
+user | post | /signup | false | complete |
+| | post | /login | false | complete |
+ || get | /:id | true | complete |
+ || patch | /forgot-password | true | WIP |
+ || patch | /profile | true | complete |
+ || delete | /:id | true | complete |
+ admin | get | /admin/:id | true | complete
+ || get | /admin/all-users/:role | true | complete
+
 ## RecipeBook
 - title: String
 - description: String
@@ -29,6 +41,10 @@ The main purpose is to be able to save as much money on a grocery list based off
   - *Recipe*
     - ID, Title, Servings
 - icon: String
+
+### Controller
+role | method | endpoint | validation | status |
+--- | --- | --- | --- | --- |
 
 ## Recipe
 - title: String
@@ -40,7 +56,11 @@ The main purpose is to be able to save as much money on a grocery list based off
   - sub: String
 - servings: Number
 
-## ingredients
+### Controller
+role | method | endpoint | validation | status |
+--- | --- | --- | --- | --- |
+
+## Ingredients
 - title: String
 - measurementType: String
 - measurement: Number
@@ -50,8 +70,16 @@ The main purpose is to be able to save as much money on a grocery list based off
 - estCost: Number
   - may be brought in later.
 
+### Controller
+role | method | endpoint | validation | status |
+--- | --- | --- | --- | --- |
+
 ## GroceryList
 - title: String
 - item: [Object]
   - *ingredients*
     - ID, title, estCost
+
+### Controller
+role | method | endpoint | validation | status |
+--- | --- | --- | --- | --- |
