@@ -6,13 +6,20 @@ const PORT = process.env.PORT;
 
 //! Imports
 const {db} = require('./db');
-// controllers
+const {
+    usercontroller, recipeBookcontroller, recipecontroller, ingredientscontroller, groceryListcontroller
+} = require('./controllers');
 
 //! Middleware
 app.use(express.json());
 app.use(cors());
 
 //! Routes
+app.use('/user', usercontroller);
+app.use('/books', recipeBookcontroller);
+app.use('/recipe', recipecontroller);
+app.use('/ingredients', ingredientscontroller);
+app.use('/lists', groceryListcontroller);
 
 //! Connection
 const server = async () => {

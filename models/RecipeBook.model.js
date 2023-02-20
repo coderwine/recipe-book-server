@@ -7,6 +7,7 @@ const RecipeBook = new mongoose.Schema({
     },
     description: String,
     recipes: [Object],
+    icon: String,
     OwnerID: {
         type: mongoose.Types.ObjectId, 
         ref: "User"

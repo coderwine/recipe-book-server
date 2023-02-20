@@ -20,22 +20,30 @@ const User = new mongoose.Schema({
         required: true
     },
     books: [Object],
-    avatar: Blob,
-    phone: Number
+    avatar: String,
+    phone: Number,
+    age: Date,
+    creationDate: Date
 },{
     virtuals: {
         fullName: {
             get() {
-                return `
-                ${this.firstName} ${this.lastName}
-                `
+                return `${this.firstName} ${this.lastName}`
             }
         },
         bookCount: {
             get() {
                 return `${this.books.length}`
             }
-        }
+        },
+        currentAge: {
+            get() {
+                const date = new Date().toDateString();
+                const userAge = date - this.age;
+
+                return(userAge);
+            }
+        },
         //TODO: Add a get() for num. recipes per book.
     }
 });

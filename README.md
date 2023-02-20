@@ -8,13 +8,14 @@ The main purpose is to be able to save as much money on a grocery list based off
 - mongoose
 - mongoose-role
   - [npm](https://www.npmjs.com/package/mongoose-role)
+- [cloudinary](https://cloudinary.com/developers)
 
 # Models 
 ## Users 
 - firstName: String
 - lastName: String
   - fullName: Virtural()
-- avatar: Blob
+- avatar: String
 - email: String
 - phone: String
 - password: String
@@ -27,11 +28,12 @@ The main purpose is to be able to save as much money on a grocery list based off
 - recipes: [OBJECT]
   - *Recipe*
     - ID, Title, Servings
+- icon: String
 
 ## Recipe
 - title: String
 - description: String
-- image: Blob
+- image: String
 - ingredients: [OBJECT]
   - item: String
   - amount: Number
