@@ -31,6 +31,7 @@ router.post('/signup', async (req, res) => {
             issue(res);
 
         const result = {
+            id: newUser._id,
             name: newUser.fullName,
             password: newUser.password,
             email: newUser.email
@@ -70,6 +71,27 @@ router.post('/login', async (req, res) => {
     }
 });
 
+//* Get One
+router.get('/:id', validate, async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+        const userID = req.user.id;
+
+        if(id !== userID) throw new Error('User cannot view this account');
+
+        const getUser = await User.findById({_id: id});
+
+        getUser ?
+            success(res, getUser) :
+            issue(res);
+
+    } catch (err) {
+        error(res, err)
+    }
+})
+
+//TODO
 //* Forget Password
 
 //* Update
@@ -121,11 +143,80 @@ router.patch('/profile', validate, async (req, res) => {
 });
 
 //* Delete
+router.delete('/:id', validate, async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+        const thisUser = await User.findById({_id: id})
+        const user = req.user;
+
+        if( thisUser.equals(user.id) || user.role === "admin") {
+            const deleteOne = await User.findByIdAndDelete(id);
+
+            const results = {
+                status: 'User Deleted',
+                name: thisUser.fullName,
+                email: thisUser.email
+            }
+
+            deleteOne ?
+                success(res, results) :
+                issue(res);
+
+        }
+
+    } catch (err) {
+        error(res, err);
+    }
+})
 
 //! Admin
 
 //* Get All Users
+router.get('/admin/all-users/:role', validate, async (req, res) => {
+    try {
+        
+        const userRole = req.user.role;
+
+        if(userRole !== 'admin') throw new Error('Must have admin status');
+
+        const role = req.params.role.toLowerCase();
+        
+        let getUsers;
+
+        if(role === "user" || role === 'admin') {
+            getUsers = await User.find({role: role});
+        } else {
+            getUsers = await User.find({});
+        }
+        
+        getUsers ?
+            success(res, getUsers) :
+            issue(res);
+
+    } catch (err) {
+        error(res, err)
+    }
+})
 
 //* Get One User by ID
+router.get('/admin/:id', validate, async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+        const user = req.user;
+
+        if(user.role !== "admin") throw new Error('Need admin status');
+
+        const findOne = await User.findById({_id: id});
+
+        findOne ?
+            success(res, findOne) :
+            issue(res);
+
+    } catch (err) {
+        error(res, err);
+    }
+})
 
 module.exports = router;
