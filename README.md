@@ -45,6 +45,14 @@ user | post | /signup | false | complete |
 ### Controller
 role | method | endpoint | validation | status |
 --- | --- | --- | --- | --- |
+user | post | / | true | WIP |
+| | get | /:id | true | Completed |
+| | get | / | false | Completed |
+| | get | /my-books | true | WIP | 
+
+**Note:**
+- `/`: requiring unique values across the entire collection.
+  - This should only account for individual users.
 
 ## Recipe
 - title: String
