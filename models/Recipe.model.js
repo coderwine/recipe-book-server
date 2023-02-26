@@ -7,16 +7,20 @@ const Recipe = new mongoose.Schema({
     },
     description: String,
     image: String,
-    ingredients: [Object],
+    ingredients: [{
+        type: mongoose.Types.ObjectId,
+        ref: "Ingredients"
+    }],
     servings: Number,
-    OwnerId: {
+    OwnerID: {
         type: mongoose.Types.ObjectId,
         ref: "User"
     },
     recipeBook: {
         type: mongoose.Types.ObjectId,
         ref: "RecipeBook"
-    }
+    },
+    dateAdded: Date
 });
 
 //NOTE: Need any virtuals?...
