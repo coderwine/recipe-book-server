@@ -21,6 +21,7 @@ router.post('/', validate, async (req, res) => {
             title, 
             description: description ? description : "Need to fill out",
             icon: icon ? icon : "not available",
+            created: new Date(),
             OwnerID: req.user._id
         });
 
@@ -36,7 +37,7 @@ router.post('/', validate, async (req, res) => {
 });
 
 // Get One
-router.get('/:id', validate, async (req, res) => {
+router.get('/single-book/:id', validate, async (req, res) => {
     try {
         
         const id = req.params.id;
@@ -72,31 +73,69 @@ router.get('/', async (req, res) => {
 
 // Get All by User
 router.get("/my-books", validate, async (req, res) => {
-    console.log(req.user)
 
-    /* 
-    TODO
-    Fix this error:
-    * "Error": "Cast to ObjectId failed for value \"my-books\" (type string) at path \"_id\" for model \"RecipeBook\""
-    */
-    
-    // try {
+    try {
         
-    //     const allBooks = await RecipeBook.find({OwnerID: req.user._id});
+        const allBooks = await RecipeBook.find({OwnerID: req.user._id});
 
-    //     console.log(allBooks)
+        allBooks ?
+            success(res, allBooks) :
+            issue(res);
 
-    //     allBooks ?
-    //         success(res, allBooks) :
-    //         issue(res);
-
-    // } catch (err) {
-    //     error(res, err);
-    // }
+    } catch (err) {
+        error(res, err);
+    }
 })
 
 // Update
+router.patch('/update-book/:id', validate, async (req, res) => {
+    try {
+        
+        const info = req.body;
+        const userID = req.user._id;
+        const { id } = req.params;
+        const filter = {_id: id, OwnerID: userID};
+        const returnOptions = {new: true}
+
+        // Checks if title already exists within users collection
+        if(info.title) {
+            const titleCheck = await RecipeBook.findOne({title: info.title, OwnerID: userID});
+    
+            if(titleCheck) throw new Error(`${info.title} book already exist, please use a different name`);
+        } 
+
+        const update = await RecipeBook.findOneAndUpdate(filter, info, returnOptions)
+
+        update ?
+            success(res, update) : issue(res);
+
+    } catch (err) {
+        error(res, err);
+    }
+});
 
 // Delete
+router.delete('/remove-book/:id', validate, async (req, res) => {
+    try {
+        
+        const userID = req.user._id;
+        const { id } = req.params;
+        const payload = {_id: id, OwnerID: userID}
+
+        const validateBookOwner = await RecipeBook.findOne(payload);
+
+        let removeBook;
+
+        validateBookOwner ?
+            removeBook = await RecipeBook.findByIdAndDelete({_id: id}) :
+            new Error("User is not authorized to remove this book.");
+        
+        removeBook ?
+            success(res, {message: `${removeBook.title} removed`}) : issue(res)
+
+    } catch (err) {
+        error(res, err);
+    }
+});
 
 module.exports = router;

@@ -8,10 +8,11 @@ const RecipeBook = new mongoose.Schema({
     description: String,
     recipes: [Object],
     icon: String,
+    created: Date,
     OwnerID: {
         type: mongoose.Types.ObjectId, 
         ref: "User"
-    }
+    },
 },{
     virtuals: {
         recipeCount: {
