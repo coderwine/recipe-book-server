@@ -34,6 +34,8 @@ user | post | /signup | false | complete |
  admin | get | /admin/:id | true | complete
  || get | /admin/all-users/:role | true | complete
 
+---
+
 ## RecipeBook
 - title: String
 - description: String
@@ -55,6 +57,8 @@ user | post | / | true | Completed |
 **Note:**
 NA
 
+---
+
 ## Recipe
 - title: String
 - description: String
@@ -68,6 +72,15 @@ NA
 ### Controller
 role | method | endpoint | validation | status |
 --- | --- | --- | --- | --- |
+user | POST | /add-recipe/:book_id | true | Completed |
+| | GET | /get-all | false | Completed |
+| | GET | /single-recipe/:id | true | Completed |
+| | GET | /get-all/user/ | true | Completed |
+| | GET | /get-all/book/:id | true | Completed |
+| | DELETE | /remove/:id | true | Completed |
+| | PATCH | /update/:id | true | Completed |
+
+---
 
 ## Ingredients
 - title: String
@@ -92,3 +105,8 @@ role | method | endpoint | validation | status |
 ### Controller
 role | method | endpoint | validation | status |
 --- | --- | --- | --- | --- |
+
+# NOTES:
+- Why might I need something like `populate()` or `join()`?
+- https://mongoosejs.com/docs/populate.html
+- https://medium.com/@mendes.develop/joining-tables-in-mongodb-with-mongoose-489d72c84b60

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { success, issue, error} = require('../helpers');
-const { RecipeBook } = require('../models');
+const { RecipeBook, User } = require('../models');
 const { validate } = require('../middleware');
 
 // Create
@@ -9,11 +9,9 @@ router.post('/', validate, async (req, res) => {
         
         const { title, description, icon } = req.body;
 
-        //TODO: Associate unique titles per user, not by the collection list
         const findBook = await RecipeBook.find({
             title: title, OwnerID: req.user._id
         });
-        // console.log('Find Book: ', findBook)
 
         if(findBook.length > 0) throw new Error('Please provide your book with a unique title')
 
@@ -26,6 +24,8 @@ router.post('/', validate, async (req, res) => {
         });
 
         const newBook = await book.save();
+
+        await User.findByIdAndUpdate({_id: book.OwnerID}, {$push: {books: newBook} });
 
         newBook ? 
             success(res, newBook) :
@@ -104,7 +104,9 @@ router.patch('/update-book/:id', validate, async (req, res) => {
             if(titleCheck) throw new Error(`${info.title} book already exist, please use a different name`);
         } 
 
-        const update = await RecipeBook.findOneAndUpdate(filter, info, returnOptions)
+        const update = await RecipeBook.findOneAndUpdate(filter, info, returnOptions);
+
+
 
         update ?
             success(res, update) : issue(res);
@@ -124,14 +126,16 @@ router.delete('/remove-book/:id', validate, async (req, res) => {
 
         const validateBookOwner = await RecipeBook.findOne(payload);
 
-        let removeBook;
+        let removed;
 
         validateBookOwner ?
-            removeBook = await RecipeBook.findByIdAndDelete({_id: id}) :
+            removed = await RecipeBook.findByIdAndDelete({_id: id}) :
             new Error("User is not authorized to remove this book.");
+
+        await User.findByIdAndUpdate({_id: userID},{$pull: {books: id}});
         
-        removeBook ?
-            success(res, {message: `${removeBook.title} removed`}) : issue(res)
+        removed ?
+            success(res, {message: `${removed.title} removed`}) : issue(res)
 
     } catch (err) {
         error(res, err);

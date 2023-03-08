@@ -19,8 +19,14 @@ const User = new mongoose.Schema({
         type: String,
         required: true
     },
-    books: [{type: mongoose.Types.ObjectId, ref: 'RecipeBook'}],
-    recipes:[{type: mongoose.Types.ObjectId, ref: 'Recipes'}],
+    books: [{
+        type: mongoose.Types.ObjectId, 
+        ref: 'RecipeBook'
+    }],
+    recipes:[{
+        type: mongoose.Types.ObjectId, 
+        ref: 'Recipes'
+    }],
     avatar: String,
     phone: Number,
     age: Date,
