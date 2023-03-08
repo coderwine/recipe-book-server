@@ -3,11 +3,17 @@ const mongoose = require('mongoose');
 const Ingredient = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
-    measurementType: String,
-    measurement: Number,
+    image: String,
+    amount: {
+        measurement: {
+            type: String,
+            enum: ["metric","us","imperial"]
+        },
+        unit: String,
+        value: Number,
+    },
     substitution: [Object],
     estCost: Number
 });
