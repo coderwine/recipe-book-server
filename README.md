@@ -73,6 +73,7 @@ NA
 role | method | endpoint | validation | status |
 --- | --- | --- | --- | --- |
 user | POST | /add-recipe/:book_id | true | Completed |
+| | PUT | /add-ingredient/:id | true | Completed
 | | GET | /get-all | false | Completed |
 | | GET | /single-recipe/:id | true | Completed |
 | | GET | /get-all/user/ | true | Completed |
@@ -80,6 +81,8 @@ user | POST | /add-recipe/:book_id | true | Completed |
 | | DELETE | /remove/:id | true | Completed |
 | | PATCH | /update/:id | true | Completed |
 
+**Notes:**
+- PUT: route requires the ID of the ingredient to be passed through the body
 ---
 
 ## Ingredients
@@ -95,6 +98,12 @@ user | POST | /add-recipe/:book_id | true | Completed |
 ### Controller
 role | method | endpoint | validation | status |
 --- | --- | --- | --- | --- |
+user | POST | /add | true | WIP |
+
+**Notes:**
+- Considering on a base measurement and recalc of various other options witin a virtual of the model.
+
+---
 
 ## GroceryList
 - title: String

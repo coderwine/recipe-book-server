@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Recipe, RecipeBook, User } = require('../models');
+const { Recipe, RecipeBook, User, Ingredient } = require('../models');
 const { success, error, issue } = require('../helpers');
 const { validate } = require('../middleware');
 
@@ -34,6 +34,37 @@ router.post('/add-recipe/:book_id', validate, async (req, res) => {
 
         addRecipe ? 
             success(res, addRecipe) : issue(res);
+
+    } catch (err) {
+        error(res, err);
+    }
+})
+
+// Add Ingredient
+router.put('/add-ingredient/:id', validate, async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+        const userID = req.user.id;
+        const ing_ID = req.body.id;
+
+        const ingredient = await Ingredient.findById(ing_ID);
+        
+        if(!ingredient) throw new Error('No Ingredient Found');
+
+        const recipe = await Recipe.find({_id: id, OwnerID: userID});
+
+        if(!recipe) throw new Error("No Recipe Found");
+
+        const added = await Recipe.findOneAndUpdate(
+                {_id: id},
+                {$addToSet: {ingredients: ingredient}},
+                {new: true}
+                )
+
+        added ? 
+            success(res, added) :
+            issue(res);
 
     } catch (err) {
         error(res, err);

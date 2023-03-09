@@ -14,7 +14,7 @@ const Ingredient = new mongoose.Schema({
         unit: String,
         value: Number,
     },
-    substitution: [Object],
+    substitutions: [Object],
     estCost: Number
 });
 
